@@ -9,7 +9,7 @@ import threading
 import Obstacle_Avoidance as oa
 
 #pid algorithm
-pid = PID(1, 0.1, 0.5, setpoint=1)
+pid = PID(2, 0.1, 0.5, setpoint=1)
 pid.output_limits = (-1, 1)
 
 def wallfollowing1_distance():
@@ -37,11 +37,10 @@ class wallfollowing(threading.Thread):
 
     def run(self):
         mv.goforward()
-
         while True:
-            time.sleep(0.001)
-            oa.checkanddriveright()
+            time.sleep(0.5)
             if  (oa.flag == False) :
+                #oa.checkanddriveright()
                 rotation = pid(wallangle())
                 print("wallangle:%f" %wallangle())
                 value = 50 + 20*rotation

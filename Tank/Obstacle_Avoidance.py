@@ -2,7 +2,6 @@ import GPIO_Setup as setup
 import movement as mv
 import sensor   as s
 import threading 
-import main
 import time
 flag = False
 #Functions for Obstacle Avoidance
@@ -21,7 +20,7 @@ def leftobstacle():
 def checkanddrivefront():
     distance = frontobstacle()
     global flag 
-    if distance < 30:
+    if distance < 15:
         flag = True
         mv.stopmotors()
         mv.turnleft(100)
@@ -32,7 +31,7 @@ def checkanddrivefront():
 def checkanddriveright(): 
     distance = rightobstacle()
     global flag
-    if distance < 30:
+    if distance < 15:
         flag = True
         mv.stopmotors()
         mv.turnleft(100)
@@ -44,7 +43,7 @@ def checkanddriveright():
 def checkanddriveleft():
     distance = leftobstacle()
     global flag 
-    if distance < 30:
+    if distance < 15:
         flag = True
         mv.stopmotors()
         mv.turnright(100)
@@ -59,7 +58,7 @@ class obstacle_avoidance(threading.Thread):
 
     def run(self):
         while True:
-            #oa.checkanddriveright()
-            oa.checkanddriveleft()
-            oa.checkanddrivefront()
+            checkanddriveright()
+            checkanddriveleft()
+            checkanddrivefront()
             time.sleep(0.001)
