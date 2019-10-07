@@ -2,7 +2,7 @@ import GPIO_Setup
 import RPi.GPIO as GPIO
 import movement as mv
 import sensor as s
-import Obstacle_Avoidance 
+import Obstacle_Avoidance as oa
 import path_planning as pp
 import numpy
 import threading
@@ -18,7 +18,7 @@ def main():
         threads = []
         t1 = pp.wallfollowing("wallfollowing")
         threads.append(t1)
-        t2 = pp.obstacle_avoidance("obstacle_avoidance")
+        t2 = oa.obstacle_avoidance("obstacle_avoidance")
         threads.append(t2)        
         for t in threads:
             t.start()

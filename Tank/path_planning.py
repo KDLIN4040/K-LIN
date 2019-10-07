@@ -40,21 +40,11 @@ class wallfollowing(threading.Thread):
 
         while True:
             time.sleep(0.001)
+            oa.checkanddriveright()
             if  (oa.flag == False) :
                 rotation = pid(wallangle())
-                print("rotation:%f" %rotation)
+                print("wallangle:%f" %wallangle())
                 value = 50 + 20*rotation
                 print("value:%f" %value)
                 driving(value)
 
-class obstacle_avoidance(threading.Thread):
-    def __init__(self,name):
-        super(obstacle_avoidance, self).__init__()
-        self.name = name
-
-    def run(self):
-        while True:
-            oa.checkanddriveright()
-            oa.checkanddriveleft()
-            oa.checkanddrivefront()
-            time.sleep(0.001)

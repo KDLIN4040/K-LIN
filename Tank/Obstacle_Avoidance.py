@@ -28,6 +28,7 @@ def checkanddrivefront():
         print("***front***:%f" %distance)
         mv.goforward()
         flag = False
+
 def checkanddriveright(): 
     distance = rightobstacle()
     global flag
@@ -37,8 +38,7 @@ def checkanddriveright():
         mv.turnleft(100)
         print("***right***:%f" %distance )
         mv.goforward()
-        flag = False
- 
+        flag = False 
 
 
 def checkanddriveleft():
@@ -51,3 +51,15 @@ def checkanddriveleft():
         print("***left***:%f" %distance )
         mv.goforward()
         flag = False
+
+class obstacle_avoidance(threading.Thread):
+    def __init__(self,name):
+        super(obstacle_avoidance, self).__init__()
+        self.name = name
+
+    def run(self):
+        while True:
+            #oa.checkanddriveright()
+            oa.checkanddriveleft()
+            oa.checkanddrivefront()
+            time.sleep(0.001)
