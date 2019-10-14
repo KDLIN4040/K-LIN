@@ -3,7 +3,7 @@ import time
 #Functions for Ultrasonic sensor    
 def send_trigger_pulse(pin):
     GPIO.output(pin, True)
-    time.sleep(0.0001)
+    time.sleep(0.02)
     GPIO.output(pin, False)
 
 def wait_for_echo(echo_pin,value, timeout):

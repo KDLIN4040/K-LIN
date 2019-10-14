@@ -16,14 +16,14 @@ def turnright(value):
     setup.l.ChangeDutyCycle(value)
     setup.r.ChangeDutyCycle(0)
     time.sleep(0.5)
-    #print("turn_right(%f)"%value)
+    print("turn_right")
 
 def turnleft(value):
     goforward()
     setup.r.ChangeDutyCycle(value)
     setup.l.ChangeDutyCycle(0)
     time.sleep(0.5)
-    #print("turn_left(%f)"%value)
+    print("turn_left")
 def stopmotors():
     GPIO.output(setup.right_motor_pin1, False)
     GPIO.output(setup.right_motor_pin2, False)

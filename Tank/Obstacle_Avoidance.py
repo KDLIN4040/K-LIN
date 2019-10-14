@@ -20,10 +20,10 @@ def leftobstacle():
 def checkanddrivefront():
     distance = frontobstacle()
     global flag 
-    if distance < 15:
+    if distance < 25:
         flag = True
         mv.stopmotors()
-        mv.turnleft(100)
+        mv.turnleft(50)
         print("***front***:%f" %distance)
         mv.goforward()
         flag = False
@@ -31,10 +31,10 @@ def checkanddrivefront():
 def checkanddriveright(): 
     distance = rightobstacle()
     global flag
-    if distance < 15:
+    if distance < 25:
         flag = True
         mv.stopmotors()
-        mv.turnleft(100)
+        mv.turnleft(50)
         print("***right***:%f" %distance )
         mv.goforward()
         flag = False 
@@ -43,10 +43,10 @@ def checkanddriveright():
 def checkanddriveleft():
     distance = leftobstacle()
     global flag 
-    if distance < 15:
+    if distance < 25:
         flag = True
         mv.stopmotors()
-        mv.turnright(100)
+        mv.turnright(50)
         print("***left***:%f" %distance )
         mv.goforward()
         flag = False
