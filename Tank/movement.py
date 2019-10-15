@@ -7,22 +7,30 @@ def goforward():
         GPIO.output(setup.right_motor_pin2,0)
         GPIO.output(setup.left_motor_pin1 ,1)
         GPIO.output(setup.left_motor_pin2 ,0)
-        setup.r.start(50)
-        setup.l.start(50)
+        setup.r.start(30)
+        setup.l.start(30)
         #print("goforward")
 
+def goback():
+	GPIO.output(setup.right_motor_pin1,0)
+	GPIO.output(setup.right_motor_pin2,1)
+	GPIO.output(setup.left_motor_pin1 ,0)
+	GPIO.output(setup.left_motor_pin2, 1)
+	setup.r.start(50)
+	setup.l.start(50)
+    
 def turnright(value):
     goforward()
     setup.l.ChangeDutyCycle(value)
     setup.r.ChangeDutyCycle(0)
-    time.sleep(0.5)
+    time.sleep(0.3)
     print("turn_right")
 
 def turnleft(value):
     goforward()
     setup.r.ChangeDutyCycle(value)
     setup.l.ChangeDutyCycle(0)
-    time.sleep(0.5)
+    time.sleep(0.3)
     print("turn_left")
 def stopmotors():
     GPIO.output(setup.right_motor_pin1, False)

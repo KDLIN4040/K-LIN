@@ -10,7 +10,7 @@ import Obstacle_Avoidance as oa
 from pylive import live_plotter
 
 #pid algorithm
-pid = PID(10, 0.5, 0.5, setpoint=1)
+pid = PID(20, 1, 0.5, setpoint=1)
 pid.output_limits = (-1, 1)
 pid.auto_mode = True
 
@@ -54,14 +54,17 @@ class wallfollowing(threading.Thread):
             if  (oa.flag == False) :
                 rotation = pid(wallangle())
                 value = 20*(rotation)
+                print("output :%f" %value)
                 driving(value)
+                '''
                 wallangle_array[i] = wallangle()
                 y_vec = wallangle_array[0:-1]
                 line1 = live_plotter(x_vec,y_vec,line1)
                 i = i+1
                 if i == 100:
                     i = 0
-                if (wallfollowing1_distance() > 150 and wallfollowing2_distance() > 150) :
+                '''
+                if (wallfollowing1_distance() > 60 and wallfollowing2_distance() > 60) :
                     mv.stopmotors()
                     mv.turnright(50)
                 
