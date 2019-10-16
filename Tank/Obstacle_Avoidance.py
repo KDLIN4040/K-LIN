@@ -21,13 +21,13 @@ def checkanddrivefront():
     distance1 = front1obstacle()
     distance2 = front2obstacle()
     global flag 
-    if (distance < 30) and (distance2 < 30) :
+    if (distance1 < 30) and (distance2 < 30) :
         flag = True
         mv.stopmotors()
         mv.goback()
         time.sleep(0.5)
         mv.turnleft(80)
-        print("***front***:%f" %distance)
+        print("***front***:(%f,%f)" %(distance1,distance2))
         mv.goforward()
         flag = False
 

@@ -37,7 +37,6 @@ def wallangle():
         flag = True
         mv.stopmotors()
         mv.turnleft(50)
-        print("***right***:%f" %distance )
         mv.goforward()
         flag = False 
     wallangle = wall1/wall2
@@ -63,7 +62,7 @@ class wallfollowing(threading.Thread):
             if  (oa.flag == False) :
                 rotation = pid(wallangle())
                 value = 20*(rotation)
-                print("output :%f" %value)
+                print("output :%f" %(50+value))
                 driving(value)
                 '''
                 wallangle_array[i] = wallangle()
