@@ -32,7 +32,7 @@ def wallangle():
     wall1 = wallfollowing1_distance()
     wall2 = wallfollowing2_distance()
     print("wall1 = %f wall2 = %f " %(wall1,wall2) )
-    if (wall1 or wall2) < 10:
+    if (wall1 < 10) or (wall2 < 10):
         global flag
         flag = True
         mv.stopmotors()
@@ -43,8 +43,8 @@ def wallangle():
     return wallangle
 
 def driving(value):
-    setup.r.ChangeDutyCycle(50+value)
-    setup.l.ChangeDutyCycle(50-value)
+    setup.r.ChangeDutyCycle(30+value)
+    setup.l.ChangeDutyCycle(30-value)
     time.sleep(0.1)
 
 class wallfollowing(threading.Thread):
@@ -62,7 +62,7 @@ class wallfollowing(threading.Thread):
             if  (oa.flag == False) :
                 rotation = pid(wallangle())
                 value = 20*(rotation)
-                print("output :%f" %(50+value))
+                print("output :%f" %(30+value))
                 driving(value)
                 '''
                 wallangle_array[i] = wallangle()
@@ -72,7 +72,7 @@ class wallfollowing(threading.Thread):
                 if i == 100:
                     i = 0
                 '''
-                if (wallfollowing1_distance() > 60 and wallfollowing2_distance() > 60) :
+                if (wallfollowing1_distance() > 100 and wallfollowing2_distance() > 100) :
                     mv.stopmotors()
                     mv.turnright(50)
                 
