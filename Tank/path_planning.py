@@ -64,6 +64,7 @@ class wallfollowing(threading.Thread):
                 value = 20*(rotation)
                 print("output :%f" %(30+value))
                 driving(value)
+    	        
                 '''
                 wallangle_array[i] = wallangle()
                 y_vec = wallangle_array[0:-1]
