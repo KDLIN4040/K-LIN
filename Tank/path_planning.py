@@ -10,7 +10,7 @@ import Obstacle_Avoidance as oa
 from pylive import live_plotter
 
 #pid algorithm
-pid = PID(20, 1, 0.5, setpoint=1)
+pid = PID(20, 2, 0.5, setpoint=1)
 pid.output_limits = (-1, 1)
 pid.auto_mode = True
 
