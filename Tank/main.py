@@ -1,3 +1,4 @@
+test about pull
 import GPIO_Setup
 import RPi.GPIO as GPIO
 import movement as mv
