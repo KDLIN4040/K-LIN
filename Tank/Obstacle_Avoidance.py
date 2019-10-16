@@ -5,12 +5,12 @@ import threading
 import time
 flag = False
 #Functions for Obstacle Avoidance
-def frontobstacle():
-    frontobstacle_distacne_cm = s.get_distance(setup.front_trigger_pin,setup.front_echo_pin)
+def front1obstacle():
+    frontobstacle_distacne_cm = s.get_distance(setup.front1_trigger_pin,setup.front1_echo_pin)
     return(frontobstacle_distacne_cm)
 
-def rightobstacle():
-    rightobstacle_distance_cm = s.get_distance(setup.right_trigger_pin,setup.right_echo_pin)
+def front2obstacle():
+    rightobstacle_distance_cm = s.get_distance(setup.front2_trigger_pin,setup.front2_echo_pin)
     return(rightobstacle_distance_cm)
 
 def leftobstacle():
@@ -18,9 +18,10 @@ def leftobstacle():
     return(leftobstacle_distance_cm )
 
 def checkanddrivefront():
-    distance = frontobstacle()
+    distance1 = front1obstacle()
+    distance2 = front2obstacle()
     global flag 
-    if distance < 30:
+    if (distance < 30) and (distance2 < 30) :
         flag = True
         mv.stopmotors()
         mv.goback()
@@ -30,6 +31,7 @@ def checkanddrivefront():
         mv.goforward()
         flag = False
 
+'''
 def checkanddriveright(): 
     distance = rightobstacle()
     global flag
@@ -40,7 +42,7 @@ def checkanddriveright():
         print("***right***:%f" %distance )
         mv.goforward()
         flag = False 
-
+'''
 
 def checkanddriveleft():
     distance = leftobstacle()
@@ -60,7 +62,7 @@ class obstacle_avoidance(threading.Thread):
 
     def run(self):
         while True:
-            checkanddriveright()
+            #checkanddriveright()
             checkanddriveleft()
             checkanddrivefront()
             time.sleep(0.001)

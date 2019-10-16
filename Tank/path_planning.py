@@ -32,8 +32,17 @@ def wallangle():
     wall1 = wallfollowing1_distance()
     wall2 = wallfollowing2_distance()
     print("wall1 = %f wall2 = %f " %(wall1,wall2) )
+    if (wall1 or wall2) < 10:
+        global flag
+        flag = True
+        mv.stopmotors()
+        mv.turnleft(50)
+        print("***right***:%f" %distance )
+        mv.goforward()
+        flag = False 
     wallangle = wall1/wall2
     return wallangle
+
 def driving(value):
     setup.r.ChangeDutyCycle(50+value)
     setup.l.ChangeDutyCycle(50-value)
