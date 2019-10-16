@@ -21,7 +21,7 @@ def main():
         
 
     except KeyboardInterrupt:
-        GPIO.cleanup()
+        GPIO_Setup.cleargpios()
         time.sleep(1)
         print("stop")
 
