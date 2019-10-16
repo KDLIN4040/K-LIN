@@ -21,16 +21,16 @@ GPIO.setup(left_motorEB_pin,GPIO.OUT)
 l = GPIO.PWM(left_motorEB_pin, 50) # GPIO for PWM with 50Hz
 
 # Define GPIO for ultrasonic Front
-front_trigger_pin = 31
-front_echo_pin = 33
-GPIO.setup(front_trigger_pin, GPIO.OUT)
-GPIO.setup(front_echo_pin, GPIO.IN)
+front1_trigger_pin = 31
+front1_echo_pin = 33
+GPIO.setup(front1_trigger_pin, GPIO.OUT)
+GPIO.setup(front1_echo_pin, GPIO.IN)
 
 # Define GPIO for ultrasonic Right
-right_trigger_pin = 35
-right_echo_pin = 37
-GPIO.setup(right_trigger_pin, GPIO.OUT)
-GPIO.setup(right_echo_pin, GPIO.IN)
+front2_trigger_pin = 35
+front2_echo_pin = 37
+GPIO.setup(front2_trigger_pin, GPIO.OUT)
+GPIO.setup(front2_echo_pin, GPIO.IN)
 
 # Define GPIO for ultrasonic Left
 left_trigger_pin = 38 
