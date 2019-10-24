@@ -33,12 +33,12 @@ def wallangle():
     wall2 = wallfollowing2_distance()
     print("wall1 = %f wall2 = %f " %(wall1,wall2) )
     if (wall1 < 10) or (wall2 < 10):
-        global flag
-        flag = True
+        global flag_obstacle
+        flag_obstacle = True
         mv.stopmotors()
         mv.turnleft(50)
         mv.goforward()
-        flag = False 
+        flag_obstacle = False 
     wallangle = wall1/wall2
     return wallangle
 

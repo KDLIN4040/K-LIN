@@ -3,7 +3,7 @@ import movement as mv
 import sensor   as s
 import threading 
 import time
-flag = False
+flag_obstacle = False
 #Functions for Obstacle Avoidance
 def front1obstacle():
     frontobstacle_distacne_cm = s.get_distance(setup.front1_trigger_pin,setup.front1_echo_pin)
@@ -21,9 +21,9 @@ def checkanddrivefront():
     distance1 = front1obstacle()
     distance2 = front2obstacle()
     print("frontobstaccle:%f,%f" %(distance1,distance2))
-    global flag 
+    global flag_obstacle 
     if (distance1 < 30) or (distance2 < 30) :
-        flag = True
+        flag_obstacle = True
         mv.stopmotors()
         mv.goback()
         time.sleep(0.5)
@@ -31,31 +31,31 @@ def checkanddrivefront():
         time.sleep(0.5)
         print("***front***:(%f,%f)" %(distance1,distance2))
         mv.goforward()
-        flag = False
+        flag_obstacle = False
 
 '''
 def checkanddriveright(): 
     distance = rightobstacle()
-    global flag
+    global flag_obstacle
     if distance < 10:
-        flag = True
+        flag_obstacle = True
         mv.stopmotors()
         mv.turnleft(50)
         print("***right***:%f" %distance )
         mv.goforward()
-        flag = False 
+        flag_obstacle = False 
 '''
 
 def checkanddriveleft():
     distance = leftobstacle()
-    global flag 
+    global flag_obstacle 
     if distance < 25:
-        flag = True
+        flag_obstacle = True
         mv.stopmotors()
         mv.turnright(50)
         print("***left***:%f" %distance )
         mv.goforward()
-        flag = False
+        flag_obstacle = False
 
 class obstacle_avoidance(threading.Thread):
     def __init__(self,name):
