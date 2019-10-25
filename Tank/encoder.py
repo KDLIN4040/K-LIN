@@ -4,6 +4,8 @@ counter = 0
 flag_backward = True
 def encoder():
     try:
+        16
+        18
         A_Wave = 11
         B_Wave = 13
         GPIO.setmode(GPIO.BOARD)

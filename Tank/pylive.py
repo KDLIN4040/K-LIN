@@ -4,7 +4,7 @@ import numpy as np
 # use ggplot style for more sophisticated visuals
 plt.style.use('ggplot')
 
-def live_plotter(x_vec,y1_data,line1,identifier='',pause_time=0.1):
+def live_plotter(x_vec,y1_data,line1,identifier='',pause_time=0.01):
     if line1==[]:
         # this is the call to matplotlib that allows dynamic plotting
         plt.ion()
