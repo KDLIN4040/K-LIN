@@ -32,6 +32,7 @@ mpu9250 = FaBo9Axis_MPU9250.MPU9250()
 i = 0
 
 while True:
+
     try:
         
         while True:  
@@ -39,9 +40,9 @@ while True:
             ax = accel['x']
             ay = accel['y']
             az = accel['z']
-            #print(" ax = " , ( ax ))
-            #print(" ay = " , ( ay ))
-            #print(" az = " , ( az ))
+            print(" ax = " , ( ax ))
+            print(" ay = " , ( ay ))
+            print(" az = " , ( az ))
             
 
             gyro = mpu9250.readGyro()
@@ -63,8 +64,8 @@ while True:
           
 
 
-            pitch = math.atan2 (ay ,( math.sqrt ((ax * ax) + (az * az))))
-            roll = math.atan2(-ax ,( math.sqrt((ay * ay) + (az * az))))
+            pitch = math.atan2 (ax ,( math.sqrt ((ax * ax) + (az * az))))
+            roll = math.atan2(ay ,( math.sqrt((ay * ay) + (az * az))))
 
             Yh = (my * math.cos(roll)) - (mz * math.sin(roll))
             Xh = (mx * math.cos(pitch))+(my * math.sin(roll)*math.sin(pitch)) + (mz * math.cos(roll) *math.sin(pitch))
@@ -75,7 +76,8 @@ while True:
             roll = roll*180
             pitch = pitch*180
             yaw = yaw*180
-    
+            print(roll)
+            print(pitch)
             print(yaw)
 
             '''
@@ -114,7 +116,7 @@ while True:
             '''
             
         
-            time.sleep(0.2)
+            time.sleep(0.5)
 
 
     except KeyboardInterrupt:
