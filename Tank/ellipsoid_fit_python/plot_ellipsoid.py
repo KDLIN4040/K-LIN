@@ -43,11 +43,11 @@ if __name__=='__main__':
 
     #ax.plot([r],[0],[0],color='r',marker='o')
     #ax.plot([radii[0]],[0],[0],color='b',marker='o')
-    
+
     #magnetic
-    plt.xlim(-2,2)
-    plt.ylim(-2,2)
-    ax.set_zlim(-2,2)
+    plt.xlim(-20,20)
+    plt.ylim(-20,20)
+    ax.set_zlim(-20,20)
     
     '''
     accel

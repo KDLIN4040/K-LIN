@@ -16,9 +16,9 @@ import sys
 import numpy as np
 import math
 from pylive import live_plotter
-
+import kalman_filter as kf
 # plot 
-i = 0
+plot_i = 0
 size = 100
 x_vec = np.linspace(0,1,size+1)[0:-1]
 yawangle_array = np.zeros(101)
@@ -29,20 +29,28 @@ accelArr = []
 magneticArr = []
 PI = 3.141592653589793238462643383279502884
 mpu9250 = FaBo9Axis_MPU9250.MPU9250()
+savedata_i = 0
+measurements_x = []
+measurements_y = []
+measurements_z = []
+measurements_yaw = []
+yawlist = []
+slope = 0
+lastslope = 0
+kalman_yaw = 0
 i = 0
-
 while True:
 
     try:
-        
         while True:  
+            ### get raw data
             accel = mpu9250.readAccel() 
             ax = accel['x']
             ay = accel['y']
             az = accel['z']
-            print(" ax = " , ( ax ))
-            print(" ay = " , ( ay ))
-            print(" az = " , ( az ))
+            #print(" ax = " , ( ax ))
+            #print(" ay = " , ( ay ))
+            #print(" az = " , ( az ))
             
 
             gyro = mpu9250.readGyro()
@@ -54,69 +62,89 @@ while True:
             #print(" gz = " , ( gz ))
            
             mag = mpu9250.readMagnet()
-            mx = mag['x']
-            my = mag['y']
-            mz = mag['z']
+            mx = mag['x']-29.59
+            my = mag['y']-15.60
+            mz = mag['z']-2.35
             
-            print(" mx = " , ( mx ))
-            print(" my = " , ( my ))
-            print(" mz = " , ( mz ))
-          
+            #print(" mx = " , ( mx ))
+            #print(" my = " , ( my ))
+            #print(" mz = " , ( mz ))
+            
+            ###Kalman_filter 
+
+            measurements_x.append(ax)
+            measurements_y.append(ay)
+            measurements_z.append(az)
+            
+            kalman_ax = kf.example(measurements_x,'ax')
+            kalman_ay = kf.example(measurements_y,'ay')
+            kalman_az = kf.example(measurements_z,'az')
+
+            #print ("ax:{} ay:{} az:{}".format(kalman_ax,kalman_ay,kalman_az))
+            
 
 
-            pitch = math.atan2 (ax ,( math.sqrt ((ax * ax) + (az * az))))
-            roll = math.atan2(ay ,( math.sqrt((ay * ay) + (az * az))))
+            
+            ### calculate pitch roll yaw
+            pitch = math.atan2 (kalman_ax ,( math.sqrt ((kalman_ax * kalman_ax) + (kalman_az * kalman_az))))
+            roll = math.atan2(kalman_ay ,( math.sqrt((kalman_ay * kalman_ay) + (kalman_az * kalman_az))))
 
             Yh = (my * math.cos(roll)) - (mz * math.sin(roll))
             Xh = (mx * math.cos(pitch))+(my * math.sin(roll)*math.sin(pitch)) + (mz * math.cos(roll) *math.sin(pitch))
-
             yaw =  math.atan2(Yh, Xh)
 
 
-            roll = roll*180
-            pitch = pitch*180
-            yaw = yaw*180
-            print(roll)
-            print(pitch)
-            print(yaw)
+            
+            roll = roll*57.3
+            pitch = pitch*57.3
+            yaw = yaw*70
+            if yaw != 0  : 
+                measurements_yaw.append(yaw)
+                kalman_yaw = kf.example(measurements_yaw,'yaw')
+            #print("roll:{},pitch:{},yaw:{}".format(int(roll),int(pitch),int(yaw)))
+            print(kalman_yaw)
+            
+            i += 1
 
-            '''
             #plot yawangle
-            yawangle_array[i] = pitch
+            '''
+            yawangle_array[plot_i] = pitch
             y_vec = yawangle_array[0:-1]
             line1 = live_plotter(x_vec,y_vec,line1)
-            i = i+1
-            if i == 100:
-                i = 0
+            plot_i += 1
+            if plot_i == 100:
+                plot_i = 0
             '''
             
-            '''
+            
             #Correct accel data
+            '''
             correct_accel = ([1.391,0.022,-0.028],[0.022,1.43,-0.075],[-0.028,-0.075,0.505])  
             correct_accel = np.array(correct_accel)
             accel = [ax,ay,az]
             accel = np.array(accel)
-            FIXaccel = accel.dot(correct_accel)         
-            accelArr.append(FIXaccel)
+            #FIXaccel = accel.dot(correct_accel)         
+            accelArr.append(accel)
             ''' 
-            '''
+            
             #Correct magnetic data
+            '''
             magnetic = [mx,my,mz]
             magnetic = np.array(magnetic)
             magneticArr.append(magnetic)
+            '''
             
-            #test save sensor data to txt
-        
-            i+=1
-            print (i)
-            if i == 100:
+            # save sensor data to txt
+            '''
+            savedata_i+=1
+            print (savedata_i)
+            if savedata_i == 500:
                 np.savetxt('acceldata.txt',accelArr)
                 np.savetxt('magneticdata.txt',magneticArr)
                 sys.exit()
             '''
-            
         
-            time.sleep(0.5)
+        
 
 
     except KeyboardInterrupt:
