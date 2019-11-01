@@ -73,39 +73,42 @@ while True:
             #print(" mz = " , ( mz ))
             
             ###Kalman_filter 
-            rawdata_array = [ax,ay,az]
+            #rawdata_array = [ax,ay,az]
+            #measurements.append(rawdata_array)
+            #kalman_accel = kf.example(measurements,'accel')
+
+            #kalman_ax = kalman_accel[0]
+            #kalman_ay = kalman_accel[1]
+            #kalman_az = kalman_accel[2]
+            #print(kalman_ax,kalman_ay,kalman_az)
+                
+                
+            #### calculate pitch roll yaw by accel
+            pitch = 180*math.atan2 (ax ,( math.sqrt ((ay * ay) + (az * az))))/PI
+            roll = 180*math.atan2(ay ,( math.sqrt((ax * ax) + (az * az))))/PI
+
+            ###use kalman filter to fuse pitch & roll which calculated by accel and gyro 
+            rawdata_array = [roll,pitch]
             measurements.append(rawdata_array)
-            kalman_accel = kf.example(measurements,'accel')
+            kalman_roll_and_pitch = kf.example(measurements,'roll&pitch')
+            
+            if len(kalman_roll_and_pitch) >=2 :
+                kalman_roll = kalman_roll_and_pitch[0]
+                kalman_pitch = kalman_roll_and_pitch[1]
 
-            if len(kalman_accel)>=3:
-                kalman_ax = kalman_accel[0]
-                kalman_ay = kalman_accel[1]
-                kalman_az = kalman_accel[2]
-                #print(kalman_ax,kalman_ay,kalman_az)
+                Yh = (my * math.cos(kalman_roll)) - (mz * math.sin(kalman_roll))
+                Xh = (mx * math.cos(kalman_pitch))+(my * math.sin(kalman_roll)*math.sin(kalman_pitch)) + (mz * math.cos(kalman_roll) *math.sin(kalman_pitch))
                 
-                '''
-                ### calculate pitch roll yaw
-                pitch = math.atan2 (kalman_ax ,( math.sqrt ((kalman_ax * kalman_ax) + (kalman_az * kalman_az))))
-                roll = math.atan2(kalman_ay ,( math.sqrt((kalman_ay * kalman_ay) + (kalman_az * kalman_az))))
-
-                Yh = (my * math.cos(roll)) - (mz * math.sin(roll))
-                Xh = (mx * math.cos(pitch))+(my * math.sin(roll)*math.sin(pitch)) + (mz * math.cos(roll) *math.sin(pitch))
-                yaw =  math.atan2(Yh, Xh)
 
 
-                
-                roll = roll*57.3
-                pitch = pitch*57.3
-                yaw = yaw*70
-                if yaw != 0  : 
-                    measurements_yaw.append(yaw)
-                    kalman_yaw = kf.example(measurements_yaw,'yaw')
-        
-                '''            
+
+                yaw =  180*math.atan2(-Yh, Xh)/PI
+                print(yaw)
+                    
 
             #plot yawangle
             '''
-            yawangle_array[plot_i] = pitch
+            yawangle_array[plot_i] = yaw
             y_vec = yawangle_array[0:-1]
             line1 = live_plotter(x_vec,y_vec,line1)
             plot_i += 1

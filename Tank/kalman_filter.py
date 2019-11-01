@@ -51,22 +51,22 @@ def example(measurements,source):
     import matplotlib.pyplot as plt
     if count >= 300:
         measurements_array = np.array(measurements)
-        predictions[0] = [0,0,0]
+        predictions[0] = [0,0]
         predictions_ax = np.array([x[0] for x in predictions])
         predictions_ay = np.array([x[1] for x in predictions])
-        predictions_az = np.array([x[2] for x in predictions])
+        #predictions_az = np.array([x[2] for x in predictions])
         ax1 = plt.subplot(311)
-        plt.plot(range(len(measurements_array[:,0])), measurements_array[:,0], label = 'ax')
+        plt.plot(range(len(measurements_array[:,0])), measurements_array[:,0], label = 'roll')
         plt.plot(range(len(predictions_ax)), predictions_ax, label = 'Kalman Filter Prediction')
         plt.legend()
         ax2 = plt.subplot(312)
-        plt.plot(range(len(measurements_array[:,1])), measurements_array[:,1], label = 'ay')
+        plt.plot(range(len(measurements_array[:,1])), measurements_array[:,1], label = 'pitch')
         plt.plot(range(len(predictions_ax)), predictions_ax, label = 'Kalman Filter Prediction')
         plt.legend()
-        ax3 = plt.subplot(313)
-        plt.plot(range(len(measurements_array[:,2])), measurements_array[:,2], label = 'az')
-        plt.plot(range(len(predictions_ax)), predictions_ax, label = 'Kalman Filter Prediction')
-        plt.legend()
+        #ax3 = plt.subplot(313)
+        #plt.plot(range(len(measurements_array[:,2])), measurements_array[:,2], label = 'az')
+        #plt.plot(range(len(predictions_ax)), predictions_ax, label = 'Kalman Filter Prediction')
+        #plt.legend()
         plt.show()
     return predictions[-1]
 if __name__ == '__main__':
