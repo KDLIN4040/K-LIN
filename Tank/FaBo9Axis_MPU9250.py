@@ -99,8 +99,8 @@ class MPU9250:
     #  @param [in] address MPU-9250 I2C slave address default:0x68
     def __init__(self, address=SLAVE_ADDRESS):
         self.address = address
-        self.configMPU9250(GFS_250, AFS_2G)
-        self.configAK8963(AK8963_MODE_C8HZ, AK8963_BIT_16)
+        self.configMPU9250(GFS_500, AFS_2G)
+        self.configAK8963(AK8963_MODE_C100HZ, AK8963_BIT_16)
 
     ## Search Device
     #  @param [in] self The object pointer.
@@ -214,7 +214,7 @@ class MPU9250:
         y = round(y*self.ares, 3)
         z = round(z*self.ares, 3)
         #return {"x":x, "y":y, "z":z}
-        return {"x":-x, "y":-y, "z":z}
+        return {"x":-x, "y":y, "z":z}
 
     ## Read gyro
     #  @param [in] self The object pointer.
@@ -259,7 +259,7 @@ class MPU9250:
                 y = round(y * self.mres * self.magYcoef, 3)
                 z = round(z * self.mres * self.magZcoef, 3)
 
-        return {"x":y, "y":x, "z":z}
+        return {"x":y, "y":x, "z":-z}
 
     ## Read temperature
     #  @param [out] temperature temperature(degrees C)

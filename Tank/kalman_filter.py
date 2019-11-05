@@ -31,7 +31,7 @@ class KalmanFilter(object):
         self.P = np.dot(np.dot(I - np.dot(K, self.H), self.P), 
             (I - np.dot(K, self.H)).T) + np.dot(np.dot(K, self.R), K.T)
 
-def example(measurements,source):
+def example(measurements):
     global count
     dt = 1.0/60
     F = np.array([[1, dt, 0], [0, 1, dt], [0, 0, 1]])
@@ -44,11 +44,16 @@ def example(measurements,source):
 
     kf = KalmanFilter(F = F, H = H, Q = Q, R = R)
     predictions = []
+    if len(measurements)>20:
+        for i in range(10):
+            measurements.pop(i) 
+           
     for z in measurements:
         predictions.append(np.dot(H,  kf.predict())[0])
         kf.update(z) 
     count += 1
     import matplotlib.pyplot as plt
+    '''
     if count >= 300:
         measurements_array = np.array(measurements)
         predictions[0] = [0,0]
@@ -68,6 +73,7 @@ def example(measurements,source):
         #plt.plot(range(len(predictions_ax)), predictions_ax, label = 'Kalman Filter Prediction')
         #plt.legend()
         plt.show()
+    '''
     return predictions[-1]
 if __name__ == '__main__':
     example()
