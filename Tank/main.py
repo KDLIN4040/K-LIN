@@ -17,11 +17,11 @@ def main():
         threads.append(t2)        
         for t in threads:
             t.start()
-
+            
         
 
     except KeyboardInterrupt:
-        GPIO_Setup.cleargpios()
+        GPIO.cleanup()
         time.sleep(1)
         print("stop")
 

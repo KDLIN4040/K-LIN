@@ -8,7 +8,10 @@ Ar_Wave = 11
 Br_Wave = 13   
 Al_Wave = 16
 Bl_Wave = 18   
-
+rcounter = 0
+lcounter = 0
+rturns = 0 
+lturns = 0
 class encoder(threading.Thread):
     def __init__(self):
         threading.Thread.__init__(self)
@@ -19,9 +22,11 @@ class encoder(threading.Thread):
         GPIO.setup(Bl_Wave, GPIO.IN)
         ArLastState = GPIO.input(Ar_Wave)
         AlLastState = GPIO.input(Al_Wave)
-        rcounter = 0
-        lcounter = 0
-        
+        global rcounter
+        global lcounter
+        global rturns
+        global lturns 
+
         while True:
             
             global flag_backward
@@ -40,7 +45,8 @@ class encoder(threading.Thread):
                         else:
                                 rcounter -= 1
                         ArLastState = Ar
-                        print ("right:{}".format(int(rcounter/50)))
+                        rturns = int(rcounter/50)
+                        print ("right:{}".format(rturns))
                 if Al != AlLastState:
                         Bl = GPIO.input(Bl_Wave)
                         if Bl != Al:
@@ -48,7 +54,8 @@ class encoder(threading.Thread):
                         else:
                                 lcounter -= 1
                         AlLastState = Al
-                        print ("left:{}".format(int(lcounter/50)))        
+                        lturns = int(lcounter/50)
+                        print ("left:{}".format(lturns))        
                 time.sleep(0.001)
 
             elif flag_backward == True:
@@ -63,7 +70,8 @@ class encoder(threading.Thread):
                         else:
                                 rcounter -= 1
                         -rcounter
-                        print ("right:{}".format(int(rcounter/50)))
+                        rturns = int(rcounter/50)
+                        print ("right:{}".format(rturns))
                         ArLastState = Ar
                 if Al != AlLastState:
                         Bl = GPIO.input(Bl_Wave)
@@ -72,7 +80,8 @@ class encoder(threading.Thread):
                         else:
                                 lcounter -= 1
                         -lcounter
-                        print ("left:{}".format(int(lcounter/50)))
+                        lturns = int(lcounter/50)
+                        print ("left:{}".format(lturns))       
                         AlLastState = Al        
                 time.sleep(0.001)
 

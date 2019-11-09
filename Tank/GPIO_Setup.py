@@ -48,16 +48,14 @@ wallfollowing_2_echo_pin = 15
 GPIO.setup(wallfollowing_2_trigger_pin, GPIO.OUT)
 GPIO.setup(wallfollowing_2_echo_pin, GPIO.IN)
 
+# Define GPIO for encoder
+Ar_Wave = 11
+Br_Wave = 13   
+Al_Wave = 16
+Bl_Wave = 18 
+GPIO.setup(Ar_Wave, GPIO.IN)
+GPIO.setup(Br_Wave, GPIO.IN)
+GPIO.setup(Al_Wave, GPIO.IN)
+GPIO.setup(Bl_Wave, GPIO.IN)
+
 #cleargpios
-def cleargpios():
-    GPIO.output(7 , False)
-    GPIO.output(13, False)
-    GPIO.output(12, False)
-    GPIO.output(16, False)
-    GPIO.output(18, False)
-    GPIO.output(22, False)
-    GPIO.output(24, False)
-    GPIO.output(31, False)
-    GPIO.output(32, False)
-    GPIO.output(35, False)
-    GPIO.output(38, False)   
