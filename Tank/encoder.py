@@ -46,7 +46,7 @@ class encoder(threading.Thread):
                                 rcounter -= 1
                         ArLastState = Ar
                         rturns = int(rcounter/50)
-                        print ("right:{}".format(rturns))
+                        #print ("right:{}".format(rturns))
                 if Al != AlLastState:
                         Bl = GPIO.input(Bl_Wave)
                         if Bl != Al:
@@ -55,8 +55,8 @@ class encoder(threading.Thread):
                                 lcounter -= 1
                         AlLastState = Al
                         lturns = int(lcounter/50)
-                        print ("left:{}".format(lturns))        
-                time.sleep(0.001)
+                        #print ("left:{}".format(lturns))        
+          
 
             elif flag_backward == True:
                 Ar = GPIO.input(Ar_Wave)
@@ -71,7 +71,7 @@ class encoder(threading.Thread):
                                 rcounter -= 1
                         -rcounter
                         rturns = int(rcounter/50)
-                        print ("right:{}".format(rturns))
+                        #print ("right:{}".format(rturns))
                         ArLastState = Ar
                 if Al != AlLastState:
                         Bl = GPIO.input(Bl_Wave)
@@ -81,10 +81,11 @@ class encoder(threading.Thread):
                                 lcounter -= 1
                         -lcounter
                         lturns = int(lcounter/50)
-                        print ("left:{}".format(lturns))       
-                        AlLastState = Al        
-                time.sleep(0.001)
-
+                        #print ("left:{}".format(lturns))       
+                        AlLastState = Al   
+            time.sleep(0.05)     
+            print (rcounter)
+        
 def main():
     try:
         threads = []

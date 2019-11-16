@@ -1,38 +1,70 @@
 #!/usr/bin/env python3
-'''Animates distances and measurment quality'''
+'''Records measurments to a given file. Usage example:
+
+$ ./record_measurments.py out.txt'''
+### 10-40 ms
+import sys
 from rplidar import RPLidar
-import matplotlib.pyplot as plt
+import math
 import numpy as np
-import matplotlib.animation as animation
-
+import threading
+import datetime
 PORT_NAME = '/dev/ttyUSB0'
-DMAX = 4000
-IMIN = 0
-IMAX = 50
+lidar_measurement = []
+lidar_data = np.array(lidar_measurement)
+lidar_data2 = np.array(lidar_measurement)
+lidar_rawdata = np.array([0,0])
+scan_flag = False
 
-def update_line(num, iterator, line):
-    scan = next(iterator)
-    offsets = np.array([(np.radians(meas[1]), meas[2]) for meas in scan])
-    line.set_offsets(offsets)
-    intens = np.array([meas[0] for meas in scan])
-    line.set_array(intens)
-    return line,
+class Lidar_Scan(threading.Thread):
+    
+    def __init__(self):
+        threading.Thread.__init__(self)
 
-def run():
-    lidar = RPLidar(PORT_NAME)
-    fig = plt.figure()
-    ax = plt.subplot(111, projection='polar')
-    line = ax.scatter([0, 0], [0, 0], s=5, c=[IMIN, IMAX],
-                           cmap=plt.cm.Greys_r, lw=0)
-    ax.set_rmax(DMAX)
-    ax.grid(True)
+    def run(self):
+        while True:
+            '''Main function'''
+            lidar = RPLidar(PORT_NAME)
+             
+            #outfile = open('out.txt', 'w')
+            global lidar_measurement
+            global lidar_rawdata
+            global lidar_data
+            global scan_flag
+            global lidar_data2
+            try:
 
-    iterator = lidar.iter_scans()
-    ani = animation.FuncAnimation(fig, update_line,
-        fargs=(iterator, line), interval=50)
-    plt.show()
-    lidar.stop()
-    lidar.disconnect()
-
-if __name__ == '__main__':
-    run()
+                print('Recording measurments... Press Crl+C to stop.')
+                
+                for measurment in lidar.iter_measurments():
+                    line = '\t'.join(str(v) for v in measurment)
+                    distance = int(measurment[2])
+                    angle = int(measurment[3]) 
+                    lidar_rawdata = [distance,angle]
+                    lidar_measurement.append(lidar_rawdata)
+                    lidar_data = np.array(lidar_measurement)
+                    length = len(lidar_data)
+                    #print(length)
+                    if length > 360:
+                        lidar_data2 = lidar_data
+                        scan_flag = True
+                        lidar_measurement = []
+                        lidar_data = np.array(lidar_measurement)
+                        #print(lidar_data2)
+                            
+                 
+                    '''
+                    print('Recording measurments... Press Crl+C to stop.')
+                    for measurment in lidar.iter_measurments():
+                        line = '\t'.join(str(v) for v in measurment)
+                        outfile.write(line + '\n')
+                    '''
+                               
+                                                        
+            except KeyboardInterrupt:
+                print('Stoping.')
+            lidar.stop()
+            lidar.disconnect()
+            outfile.close()
+              
+            time.sleep(0.01) 

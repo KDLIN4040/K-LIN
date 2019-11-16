@@ -91,7 +91,7 @@ class RPLidar(object):
     port = ''  #: Serial port name, e.g. /dev/ttyUSB0
     timeout = 1  #: Serial port timeout
     motor = False  #: Is motor running?
-    baudrate = 9600  #: Baudrate for serial port
+    baudrate = 115200  #: Baudrate for serial port
 
     def __init__(self, port, baudrate=115200, timeout=1, logger=None):
         '''Initilize RPLidar object for communicating with the sensor.
@@ -274,7 +274,7 @@ class RPLidar(object):
         self._send_cmd(RESET_BYTE)
         time.sleep(.002)
 
-    def iter_measurments(self, max_buf_meas=500):
+    def iter_measurments(self, max_buf_meas=1000):
         '''Iterate over measurments. Note that consumer must be fast enough,
         otherwise data will be accumulated inside buffer and consumer will get
         data with increaing lag.
@@ -333,7 +333,7 @@ class RPLidar(object):
                     self._serial_port.read(data_in_buf//dsize*dsize)
             yield _process_scan(raw)
 
-    def iter_scans(self, max_buf_meas=500, min_len=5):
+    def iter_scans(self, max_buf_meas=1000, min_len=5):
         '''Iterate over scans. Note that consumer must be fast enough,
         otherwise data will be accumulated inside buffer and consumer will get
         data with increasing lag.
