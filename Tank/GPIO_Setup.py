@@ -12,7 +12,7 @@ GPIO.setup(right_motorEA_pin,GPIO.OUT)
 r = GPIO.PWM(right_motorEA_pin, 50) # GPIO for PWM with 50Hz
 
 #define GPIO For Driver motors Left
-left_motorEB_pin = 32
+left_motorEB_pin = 26
 left_motor_pin1 = 22
 left_motor_pin2 = 24
 GPIO.setup(left_motor_pin1,GPIO.OUT)

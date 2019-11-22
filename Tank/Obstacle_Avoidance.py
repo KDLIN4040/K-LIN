@@ -1,6 +1,6 @@
 import GPIO_Setup as setup
-import movement as mv
-import sensor   as s
+import Movement as mv
+import Sensor   as s
 import threading 
 import time
 flag_obstacle = False

@@ -1,6 +1,6 @@
 import time
-import sensor as s
-import movement as mv
+import Sensor as s
+import Movement as mv
 import GPIO_Setup as setup
 import RPi.GPIO as GPIO
 from simple_pid import PID
@@ -59,7 +59,7 @@ class wallfollowing(threading.Thread):
         global line1
         while True:
             time.sleep(0.01)
-            if  (oa.flag == False) :
+            if  (oa.flag_obstacle == False) :
                 rotation = pid(wallangle())
                 value = 20*(rotation)
                 print("output :%f" %(30+value))
@@ -76,4 +76,6 @@ class wallfollowing(threading.Thread):
                 if (wallfollowing1_distance() > 100 and wallfollowing2_distance() > 100) :
                     mv.stopmotors()
                     mv.turnright(50)
-                
+
+if __name__ == "__main__":
+    wallfollowing("wallfollowing")

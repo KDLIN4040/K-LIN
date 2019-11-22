@@ -8,8 +8,9 @@ import RPi.GPIO as GPIO
 import threading
 import numpy as np
 import datetime
+import matplotlib.pyplot as plt
 yaw = 0
-
+yaw_flag = False
 
 SETTINGS_FILE = "RTIMULib"
 s = RTIMU.Settings(SETTINGS_FILE)
@@ -57,6 +58,7 @@ class MARG(threading.Thread):
 
     def run(self):
         init_MARG()
+        global yaw_flag
         while True:
             get_yaw()
 
@@ -183,14 +185,11 @@ class encoder(threading.Thread):
 
     def run(self):
         init_encoder()
+        global encoder_flag
         while True:
             rotation_decode(Enc_A)
 
-
 position_flag = False            
-vector = np.array([0,0])
-xn = 0
-yn = 0
 position = np.array([0.0,0.0])
 class RobotPosition(threading.Thread):
     def __init__(self):
@@ -198,24 +197,27 @@ class RobotPosition(threading.Thread):
 
     def run(self):
         global yaw
-        global vector
+        global yaw_flag
         global counter
-        global xn
-        global yn
+        global encoder_flag
         global position
+        global position_flag
+        dl = 0
+        vector = np.array([0.0,0.0])
+        xn = 0
+        yn = 0
         while True:
-            dl = counter
-            time.sleep(0.5)
-            vector[0] =  counter
-            vector[1] =  math.radians(yaw)
-            d = vector[0] - dl
-            x = d*math.cos(vector[1])
-            y = d*math.sin(vector[1])
-            xn += x
-            yn += y
-            position = [round(xn,3),round(yn,3)]
-            print("position:{}".format(position))
-            position_flag = True
+                dl = counter
+                time.sleep(0.5)
+                vector[0] =  counter
+                vector[1] =  math.radians(yaw)
+                d = vector[0] - dl
+                x = d*math.cos(vector[1])
+                y = d*math.sin(vector[1])
+                xn += x
+                yn += y
+                position = [round(xn,3),round(yn,3),vector[1]]
+                position_flag = True
 if __name__ == "__main__":
     threads = []
     t1 = RobotPosition()

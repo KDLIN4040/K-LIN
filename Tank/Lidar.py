@@ -38,20 +38,20 @@ class Lidar_Scan(threading.Thread):
                 
                 for measurment in lidar.iter_measurments():
                     line = '\t'.join(str(v) for v in measurment)
-                    distance = int(measurment[2])
-                    angle = int(measurment[3]) 
+                    angle = int(measurment[2]) 
+                    distance = int(measurment[3])
                     lidar_rawdata = [distance,angle]
                     lidar_measurement.append(lidar_rawdata)
                     lidar_data = np.array(lidar_measurement)
                     length = len(lidar_data)
                     #print(length)
-                    if length > 360:
+                    if length > 10:
                         lidar_data2 = lidar_data
                         scan_flag = True
                         lidar_measurement = []
                         lidar_data = np.array(lidar_measurement)
                         #print(lidar_data2)
-                            
+                       
                  
                     '''
                     print('Recording measurments... Press Crl+C to stop.')
