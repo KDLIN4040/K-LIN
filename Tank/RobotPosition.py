@@ -190,7 +190,7 @@ class encoder(threading.Thread):
             rotation_decode(Enc_A)
 
 position_flag = False            
-position = np.array([0.0,0.0])
+position = (0.0,0.0, 0.0)
 class RobotPosition(threading.Thread):
     def __init__(self):
         threading.Thread.__init__(self)
@@ -208,15 +208,17 @@ class RobotPosition(threading.Thread):
         yn = 0
         while True:
                 dl = counter
-                time.sleep(0.5)
+                yawl = yaw
+                time.sleep(0.1)
                 vector[0] =  counter
-                vector[1] =  math.radians(yaw)
+                vector[1] =  yaw
                 d = vector[0] - dl
-                x = d*math.cos(vector[1])
-                y = d*math.sin(vector[1])
-                xn += x
-                yn += y
-                position = [round(xn,3),round(yn,3),vector[1]]
+                dyaw = int(vector[1] -yawl)
+                #x = d*math.cos(vector[1])
+                #y = d*math.sin(vector[1])
+                #xn += x
+                #yn += y
+                position = (d*1000, dyaw, 0.1)
                 position_flag = True
 if __name__ == "__main__":
     threads = []
