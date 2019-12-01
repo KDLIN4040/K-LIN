@@ -5,6 +5,7 @@ from rplidar import RPLidar as Lidar
 import threading
 import numpy as np
 import struct
+import time
 def pose_read(pose):
     if rp.position_flag == True:
         #print(rp_position,rp_theta)
@@ -29,31 +30,39 @@ class rpslam(threading.Thread):
         # Connect to Lidar unit
         lidar = Lidar(LIDAR_DEVICE)
         # Create an iterator to collect scan data from the RPLidar
-        iterator = lidar.iter_scans()
+        iterator = lidar.iter_scans(max_buf_meas=1000)
         # First scan is crap, so ignore it
         next(iterator)
-        pose = (0, 0, 0)
+        pose = [0.0, 0.0, 0.0]
         bufsize = 4096
+        data_mix = []
+        lock = threading.Lock()
         while True:
             
+            pose = pose_read(pose)            
             # Extract (quality, angle, distance) triples from current scan
             items = [item for item in next(iterator)]
             distances = [item[2] for item in items]
             angles = [item[1] for item in items]
 
-            data_distances = struct.pack('%sf' %(len(distances)),*distances)
-            socket02.send(data_distances)
+            items_size = [float(len(items))]
+            data_mix.extend(pose)
+            data_mix.extend(items_size)
+            data_mix.extend(distances)
+            data_mix.extend(angles)
+            data = struct.pack('%sf'%(len(data_mix)),*data_mix)
+            print(len(items))
+            socket02.send(data)
             
             data = socket02.recv(bufsize)
             if not data : 
                 print('Server say:', data)
-            
-            data_angles = struct.pack('%sf' %(len(angles)),*angles)
-            socket02.send(data_angles)
 
-            pose = pose_read(pose)
             
+
             
+            data_mix.clear()
+            time.sleep(0.001)
         socket02.close()  # 關閉
         print('client close')
 

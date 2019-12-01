@@ -274,7 +274,7 @@ class RPLidar(object):
         self._send_cmd(RESET_BYTE)
         time.sleep(.002)
 
-    def iter_measurments(self, max_buf_meas=500):
+    def iter_measurments(self, max_buf_meas=1000):
         '''Iterate over measurments. Note that consumer must be fast enough,
         otherwise data will be accumulated inside buffer and consumer will get
         data with increaing lag.
@@ -333,7 +333,7 @@ class RPLidar(object):
                     self._serial_port.read(data_in_buf//dsize*dsize)
             yield _process_scan(raw)
 
-    def iter_scans(self, max_buf_meas=500, min_len=5):
+    def iter_scans(self, max_buf_meas=1000, min_len=5):
         '''Iterate over scans. Note that consumer must be fast enough,
         otherwise data will be accumulated inside buffer and consumer will get
         data with increasing lag.

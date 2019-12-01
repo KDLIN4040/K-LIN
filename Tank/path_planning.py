@@ -7,7 +7,6 @@ from simple_pid import PID
 import numpy as np
 import threading 
 import Obstacle_Avoidance as oa
-from pylive import live_plotter
 
 #pid algorithm
 pid = PID(20, 2, 0.5, setpoint=1)
@@ -65,14 +64,6 @@ class wallfollowing(threading.Thread):
                 print("output :%f" %(30+value))
                 driving(value)
     	        
-                '''
-                wallangle_array[i] = wallangle()
-                y_vec = wallangle_array[0:-1]
-                line1 = live_plotter(x_vec,y_vec,line1)
-                i = i+1
-                if i == 100:
-                    i = 0
-                '''
                 if (wallfollowing1_distance() > 100 and wallfollowing2_distance() > 100) :
                     mv.stopmotors()
                     mv.turnright(50)

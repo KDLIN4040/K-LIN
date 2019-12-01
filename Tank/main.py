@@ -6,10 +6,10 @@ import Obstacle_Avoidance as oa
 import path_planning as pp
 import slam_test as st
 import RobotPosition as rp
-import Lidar 
+import client
 import numpy as np
 import threading
-from pylive import live_plotter
+
 def main():
     try:
     
@@ -19,15 +19,13 @@ def main():
         t3 = rp.MARG()
         t4 = rp.encoder()
         t5 = rp.RobotPosition()
-        t6 = Lidar.Lidar_Scan()
-        t7 = st.ekf_slam_start()
+        t6 = client.rpslam()
         threads.append(t1)
         threads.append(t2)
         threads.append(t3)
         threads.append(t4)
         threads.append(t5)
         threads.append(t6)
-        threads.append(t7)
         for t in threads:
             t.start()
             

@@ -71,36 +71,28 @@ def main():
         previous_distances = None
         previous_angles    = None
         bufsize = 4096  # 指定要接收的數據大小
+        distances = []
+        angles = []
+        pose = []
         while True:
             
             
             
-            data_distances = conn.recv(bufsize)  # 接收遠端主機傳來的數據(distance)
-            distances = struct.unpack('%sf' %(len(data_distances)//4),data_distances)
+            data = conn.recv(bufsize)  # 接收遠端主機傳來的數據(distance)
+            data_mix = struct.unpack('%sf' %(len(data)//4),data)
+            pose[0:3] = data_mix[0:3]
+            item_size = int(data_mix[3])
+            distances[0:item_size] = data_mix[1:item_size+1]
+            angles[0:item_size] = data_mix[item_size+1:2*item_size+1]
             
-            if not data_distances: 
-                print('distance')
 
             string = 'distance' 
             conn.send(bytes(string, encoding = "utf8"))  # 發送數據給指定的遠端主機
-
-            data_angles = conn.recv(bufsize) #接收遠端主機傳來的數據(angle)
-            angles = struct.unpack('%sf' %(len(data_angles)//4),data_angles)
-            
-            if not data_angles:
-                print('angle')
-
-            string = 'angle' 
-            conn.send(bytes(string, encoding = "utf8"))  # 發送數據給指定的遠端主機
             
 
-            # Extract distances and angles from triples
-            distances = list(distances)
-            angles = list(angles)
 
-            #pose = pose_read(pose)
             # Update SLAM with current Lidar scan and scan angles if adequate
-            if len(distances) > MIN_SAMPLES:
+            if (len(distances) > MIN_SAMPLES) and (len(distances) == len(angles)):
                 slam.update(distances,scan_angles_degrees=angles)
                 previous_distances = distances.copy()
                 previous_angles    = angles.copy()
@@ -115,7 +107,8 @@ def main():
             print(theta)
             # Get current map bytes as grayscale
             slam.getmap(mapbytes)
-
+            distances.clear()
+            angles.clear()
             # Display map and robot pose, exiting gracefully if user closes it
             if not viz.display(x/1000., y/1000., theta, mapbytes):
                 exit(0)

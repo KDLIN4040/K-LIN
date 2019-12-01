@@ -218,7 +218,7 @@ class RobotPosition(threading.Thread):
                 #y = d*math.sin(vector[1])
                 #xn += x
                 #yn += y
-                position = (d*1000, dyaw, 0.1)
+                position = [d*1000, dyaw, 0.1]
                 position_flag = True
 if __name__ == "__main__":
     threads = []
