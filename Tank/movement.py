@@ -1,48 +1,67 @@
-import GPIO_Setup as setup
 import RPi.GPIO as GPIO
 import time
+GPIO.setmode(GPIO.BOARD)
+
+#define GPIO For Driver motors Right
+right_motorEA_pin = 12
+right_motor_pin1 = 16
+right_motor_pin2 = 18
+GPIO.setup(right_motor_pin1,GPIO.OUT)
+GPIO.setup(right_motor_pin2,GPIO.OUT)
+GPIO.setup(right_motorEA_pin,GPIO.OUT)
+r = GPIO.PWM(right_motorEA_pin,30) # GPIO for PWM with 50Hz
+
+#define GPIO For Driver motors Left
+left_motorEB_pin = 26
+left_motor_pin1 = 22
+left_motor_pin2 = 24
+GPIO.setup(left_motor_pin1,GPIO.OUT)
+GPIO.setup(left_motor_pin2,GPIO.OUT)
+GPIO.setup(left_motorEB_pin,GPIO.OUT)
+l = GPIO.PWM(left_motorEB_pin,50) # GPIO for PWM with 50Hz
+
 # Functions for driving
 def goforward():
-    GPIO.output(setup.right_motor_pin1,1)
-    GPIO.output(setup.right_motor_pin2,0)
-    GPIO.output(setup.left_motor_pin1 ,1)
-    GPIO.output(setup.left_motor_pin2 ,0)
-    setup.r.start(100)
-    setup.l.start(100)
+    GPIO.output(right_motor_pin1,1)
+    GPIO.output(right_motor_pin2,0)
+    GPIO.output(left_motor_pin1 ,1)
+    GPIO.output(left_motor_pin2 ,0)
+    r.start(100)
+    l.start(100)
     print("goforward")
 
 def goback():
-    GPIO.output(setup.right_motor_pin1,0)
-    GPIO.output(setup.right_motor_pin2,1)
-    GPIO.output(setup.left_motor_pin1 ,0)
-    GPIO.output(setup.left_motor_pin2, 1)
-    setup.r.start(100)
-    setup.l.start(100)
+    GPIO.output(right_motor_pin1,0)
+    GPIO.output(right_motor_pin2,1)
+    GPIO.output(left_motor_pin1 ,0)
+    GPIO.output(left_motor_pin2, 1)
+    r.start(100)
+    l.start(100)
     print("goback")
 
 def turn_right():
-    GPIO.output(setup.right_motor_pin1,0)
-    GPIO.output(setup.right_motor_pin2,0)
-    GPIO.output(setup.left_motor_pin1 ,1)
-    GPIO.output(setup.left_motor_pin2, 0)
-    setup.r.start(100)
-    setup.l.start(100)
+    GPIO.output(right_motor_pin1,0)
+    GPIO.output(right_motor_pin2,0)
+    GPIO.output(left_motor_pin1 ,1)
+    GPIO.output(left_motor_pin2, 0)
+    r.start(100)
+    l.start(100)
     print("turn_right")
 def turn_left():
-    GPIO.output(setup.right_motor_pin1,1)
-    GPIO.output(setup.right_motor_pin2,0)
-    GPIO.output(setup.left_motor_pin1 ,0)
-    GPIO.output(setup.left_motor_pin2, 0)
-    setup.r.start(100)
-    setup.l.start(100)
+    GPIO.output(right_motor_pin1,1)
+    GPIO.output(right_motor_pin2,0)
+    GPIO.output(left_motor_pin1 ,0)
+    GPIO.output(left_motor_pin2, 0)
+    r.start(100)
+    l.start(100)
     print("turn_left")
 def move_arc():
-    GPIO.output(setup.right_motor_pin1,1)
-    GPIO.output(setup.right_motor_pin2,0)
-    GPIO.output(setup.left_motor_pin1 ,1)
-    GPIO.output(setup.left_motor_pin2 ,0)
-    setup.r.start(50)
-    setup.l.start(100)
+    GPIO.output(right_motor_pin1,1)
+    GPIO.output(right_motor_pin2,0)
+    GPIO.output(left_motor_pin1 ,1)
+    GPIO.output(left_motor_pin2 ,0)
+    r.start(10)
+    l.start(100)
     print("move_arc")
 '''    
 def turnright(value):
@@ -61,8 +80,8 @@ def turnleft(value):
 '''
 
 def stopmotors():
-    GPIO.output(setup.right_motor_pin1, False)
-    GPIO.output(setup.right_motor_pin2, False)
-    GPIO.output(setup.left_motor_pin1, False)
-    GPIO.output(setup.left_motor_pin2, False)
+    GPIO.output(right_motor_pin1, False)
+    GPIO.output(right_motor_pin2, False)
+    GPIO.output(left_motor_pin1, False)
+    GPIO.output(left_motor_pin2, False)
     time.sleep(1)
