@@ -50,6 +50,8 @@ def get_yaw():
         #pitch = math.degrees(fusionPose[1])
         #print("r: %f p: %f y: %f" % (roll, pitch, yaw))
         yaw = math.degrees(fusionPose[2])
+        if yaw < 0:
+            yaw += 360
         time.sleep(poll_interval*1.0/1000.0)
     
 class MARG(threading.Thread):
@@ -58,10 +60,10 @@ class MARG(threading.Thread):
 
     def run(self):
         init_MARG()
-        global yaw_flag
+        global yaw
         while True:
             get_yaw()
-
+            #print(yaw)
 #!/usr/bin/python
 #-------------------------------------------------------------------------------
 # FileName:     Rotary_Encoder-1a.py
@@ -218,6 +220,8 @@ class RobotPosition(threading.Thread):
                 #y = d*math.sin(vector[1])
                 #xn += x
                 #yn += y
+                if dyaw >330:
+                    dyaw = 0
                 position = [d*1000, dyaw, 0.1]
                 position_flag = True
 if __name__ == "__main__":
