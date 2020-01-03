@@ -63,7 +63,7 @@ class MARG(threading.Thread):
         global yaw
         while True:
             get_yaw()
-            #print(yaw)
+            print(yaw)
 #!/usr/bin/python
 #-------------------------------------------------------------------------------
 # FileName:     Rotary_Encoder-1a.py
