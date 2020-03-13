@@ -14,7 +14,7 @@ r = GPIO.PWM(right_motorEA_pin, 50) # GPIO for PWM with 50Hz
 
 #define GPIO For Driver motors Left
 left_motorEB_pin = 26
-left_motor_pin1 = 22
+left_motor_pin1 = 32
 left_motor_pin2 = 24
 GPIO.setup(left_motor_pin1,GPIO.OUT)
 GPIO.setup(left_motor_pin2,GPIO.OUT)
@@ -34,21 +34,18 @@ GPIO.setup(front2_trigger_pin, GPIO.OUT)
 GPIO.setup(front2_echo_pin, GPIO.IN)
 
 # Define GPIO for ultrasonic Left
-left_trigger_pin = 38 
-left_echo_pin = 40
+left_trigger_pin = 13 
+left_echo_pin = 15
 GPIO.setup(left_trigger_pin, GPIO.OUT)
 GPIO.setup(left_echo_pin, GPIO.IN)
 
 # Define GPIO for wallfollowing 
-wallfollowing_1_trigger_pin = 7 
-wallfollowing_1_echo_pin = 11
-GPIO.setup(wallfollowing_1_trigger_pin, GPIO.OUT)
-GPIO.setup(wallfollowing_1_echo_pin, GPIO.IN)
-wallfollowing_2_trigger_pin = 13
-wallfollowing_2_echo_pin = 15
-GPIO.setup(wallfollowing_2_trigger_pin, GPIO.OUT)
-GPIO.setup(wallfollowing_2_echo_pin, GPIO.IN)
+right_trigger_pin = 38 
+right_echo_pin = 40
+GPIO.setup(right_trigger_pin, GPIO.OUT)
+GPIO.setup(right_echo_pin, GPIO.IN)
 
+'''
 # Define GPIO for encoder
 Ar_Wave = 11
 Br_Wave = 13   
@@ -58,5 +55,5 @@ GPIO.setup(Ar_Wave, GPIO.IN)
 GPIO.setup(Br_Wave, GPIO.IN)
 GPIO.setup(Al_Wave, GPIO.IN)
 GPIO.setup(Bl_Wave, GPIO.IN)
+'''
 
-#cleargpios

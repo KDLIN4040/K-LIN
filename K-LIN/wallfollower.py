@@ -22,27 +22,19 @@ GPIO.setup(front2_trigger_pin, GPIO.OUT)
 GPIO.setup(front2_echo_pin, GPIO.IN)
 
 # Define GPIO for ultrasonic Left
-left_trigger_pin = 38 
-left_echo_pin = 40
+left_trigger_pin = 13 
+left_echo_pin = 15
 GPIO.setup(left_trigger_pin, GPIO.OUT)
 GPIO.setup(left_echo_pin, GPIO.IN)
 
 # Define GPIO for wallfollowing 
-wallfollowing_1_trigger_pin = 7 
-wallfollowing_1_echo_pin = 11
-GPIO.setup(wallfollowing_1_trigger_pin, GPIO.OUT)
-GPIO.setup(wallfollowing_1_echo_pin, GPIO.IN)
-wallfollowing_2_trigger_pin = 13
-wallfollowing_2_echo_pin = 15
-GPIO.setup(wallfollowing_2_trigger_pin, GPIO.OUT)
-GPIO.setup(wallfollowing_2_echo_pin, GPIO.IN)
+right_trigger_pin = 38 
+right_echo_pin = 40
+GPIO.setup(right_trigger_pin, GPIO.OUT)
+GPIO.setup(right_echo_pin, GPIO.IN)
 
-def right1_distance():
-    distance = s.get_distance(wallfollowing_1_trigger_pin,wallfollowing_1_echo_pin)
-    return distance
-
-def right2_distance():
-    distance = s.get_distance(wallfollowing_2_trigger_pin,wallfollowing_2_echo_pin)
+def right_distance():
+    distance = s.get_distance(right_trigger_pin,right_echo_pin)
     return distance
 
 def front1_distance():
@@ -56,7 +48,7 @@ def front2_distance():
 def left_distance():
     leftobstacle_distance_cm  = s.get_distance(left_trigger_pin, left_echo_pin)
     return(leftobstacle_distance_cm )
-
+autoflag = false
 
 class wallfollower(threading.Thread):
     def __init__(self):
@@ -70,28 +62,32 @@ class wallfollower(threading.Thread):
             front2 = 40
             left   = 40
             while True:
-                right1 = right2_distance()
-                front1 = front1_distance()
-                front2 = front2_distance()
-                left   = left_distance()           
-                print("right1:{},front1:{},front2:{},left:{}".format(right1,front1,front2,left))
-                
-                mv.goforward()
-                
-                if (front1 < 20) or (front2 < 20):
-                    mv.stopmotors()
-                    mv.goback()
-                    time.sleep(1)
-                    mv.turn_left()
-                    time.sleep(0.5)
-                elif right1 < 30 :
-                    mv.turn_left()
-                elif left < 30 :
-                    mv.turn_right()
-                elif sweetspot_lowerbond < right1 < sweetspot_upperbond :
+                global autoflag
+                if (autoflag == True):
+                    right = right_distance()
+                    front1 = front1_distance()
+                    front2 = front2_distance()
+                    left   = left_distance()           
+                    print("right:{},front1:{},front2:{},left:{}".format(right,front1,front2,left))
+                    
                     mv.goforward()
-                else:
-                    mv.move_arc()  
+                    
+                    if (front1 < 20) or (front2 < 20):
+                        mv.stopmotors()
+                        mv.goback()
+                        time.sleep(1)
+                        mv.turn_left()
+                        time.sleep(0.5)
+                    elif right1 < 30 :
+                        mv.turn_left()
+                    elif left < 30 :
+                        mv.turn_right()
+                    elif sweetspot_lowerbond < right1 < sweetspot_upperbond :
+                        mv.goforward()
+                    else:
+                        mv.move_arc()  
+                elif(autoflag == False):
+                    break    
                 
                 time.sleep(0.01)
 
