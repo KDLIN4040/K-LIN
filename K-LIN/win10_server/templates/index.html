@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+  <head>
+    <link rel="stylesheet" href="">
+    <link rel="stylesheet" href="static/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script> 
+    <script data-main="static/js/app-config.js" src="static/js/require.js"></script>
+  </head>
+  <style>
+   body {
+    background-color: black;
+  }
+  .list {
+    margin-top: 20px; 
+  }
+
+  .btn {
+    height: 100px;
+  }
+
+  .car-image-box {
+    margin: 20px 0px;
+    width:400px;
+    position: relative;
+    display: flex; 
+    align-items: center;
+    justify-content: center;
+  }
+
+  .angel-style {
+    font-size: 30px;
+  }
+  /* Style The Dropdown Button */
+  .dropbtn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 16px;
+    width:200px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+  }
+
+  /* The container <div> - needed to position the dropdown content */
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+
+  /* Dropdown Content (Hidden by Default) */
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    top:50px;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+  }
+
+  /* Links inside the dropdown */
+  .dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+  }
+
+  /* Change color of dropdown links on hover */
+  .dropdown-content a:hover {background-color: #f1f1f1}
+
+  /* Show the dropdown menu on hover */
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
+
+  /* Change the background color of the dropdown button when the dropdown content is shown */
+  .dropdown:hover .dropbtn {
+    background-color: #3e8e41;
+  }
+
+  canvas {
+    position: absolute;
+    top:500px;
+    right:50%;
+    border: 4px solid blue;
+  }
+</style>
+ <body >
+    <h1 style="position:absolute;left:45%; color:blue;">Robot Control Panel</h1>
+    <div id = "information" class="container" style="position: absolute;top:5%;left:50%;margin-top: 0px;">
+      <h1 style="position: absolute;left:150px;color:#FF6347">Thermal Streaming</h1>
+      <iframe src="http://192.168.11.48:8080/" height="350" width="400"style="position: absolute;top: 50px;left:150px;border: 4px solid blue;"></iframe>
+      <div style="position:absolute;top:450px;left:100px;border-color:#aaaaee;border-style:solid;border-width:3px;padding-top:400px;padding-right:400px;padding-left:100px ">
+        <img style="position: absolute;top:150px;left:250px" src="/static/img/sign.png" id="sign">
+        <h1 style="color:white;position: absolute;top: 50px;left:10%">Sound angle(degree)</h1>
+        <h1 id='angle' style="color:red;position: absolute;top: 150px;left:150px">0&deg</h1>
+      </div>
+    </div>
+    <div id ="Mode" style="position: absolute;top:5%;left:30%;margin-top: 0px;" > 
+      <div class="dropdown">
+          <button class="dropbtn" style="position: absolute;top:30px;left:0px">Control Mode</button>
+          <div class="dropdown-content">
+            <a onclick = "manual()">Manual Mode</a>
+            <a onclick = "auto()">Auto Mode</a>
+      </div>
+    </div>
+    <div id= "control" style="position: absolute;top:5%;left:50%;margin-top: 0px;">
+      <button type="button"onclick="forward()" style="position: absolute; top:100px;left:300px"><img src="/static/img/up.png" width="50"height="50"></button>
+      <button type="button"onclick="turnleft()" style="position: absolute; top:200px;left:200px"><img src="/static/img/left.png" width="50"height="50"></button>
+      <button type="button"onclick="turnright()" style="position: absolute; top:200px;left:400px"><img src="/static/img/right.png" width="50"height="50"></button>
+      <button type="button"onclick="backward()" style="position: absolute; top:300px;left:300px"><img src="/static/img/down.png" width="50"height="50"></button>
+      <button type="button"onclick="stopmotors()" style="position: absolute; top:200px;left:300px"><img src="/static/img/stop.jpg" width="50"height="50"></button>
+    </div>
+
+<!--
+         <div id="app" class="container" style="margin-top: 0px;">
+    <div class="row list">
+      <div class="col-8 offset-2">
+          <iframe src="http://192.168.11.29:8080/" height="400" width="400"style="position: absolute;top: 50px;left:0px"></iframe>
+          <h2 style="position: absolute;top: 150px;left:500px">Sound_direction</h2>
+          
+        
+        <div class="dropdown">
+          <button class="dropbtn" style="position: absolute;top:0px;left:300px">Dropdown</button>
+          <div class="dropdown-content">
+            <a onclick = "manual()">Manual</a>
+            <a onclick = "auto()">Auto</a>
+          </div>
+        </div>
+        <div clss="">
+          <button type="button" class="btn btn-primary btn-block" onclick="stopmotors()">stop</button>
+        </div>
+      </div>
+    </div>
+    <div class="row list">
+      <div class="col-4 offset-4">
+        <button type="button" class="btn btn-primary btn-block" onclick="forward()" style="">Front</button>
+      </div>
+    </div>
+    <div class="row list">
+      <div class="col-4 offset-2">
+        <button type="button" class="btn btn-primary btn-block" onclick="turnleft()">left</button>
+      </div>
+      <div class="col-4">
+        <button type="button" class="btn btn-primary btn-block" onclick="turnright()">right</button>
+      </div>
+    </div>
+    <div class="row list">
+      <div class="col-4 offset-4">
+        <button type="button" class="btn btn-primary btn-block" onclick="backward()" >Back</button>
+      </div>
+    </div>
+  </div>
+
+     
+
+
+
+    
+        <button onclick="manual()">manual</button><br>
+        <button onclick="auto()">auto</button><br>
+        <button onclick="forward()">forward</button><br>
+        <button onclick="turnright()">turnright</button><br>
+        <button onclick="turnleft()">turnleft</button><br>
+        <button onclick="backward()">backward</button><br>
+        <button onclick="stopmotors()">stopmotors</button><br>
+        <button onclick="sound_angle()">askangle</button><br>
+
+        <iframe src="http://192.168.11.48:8080/" height="320" width="400"></iframe> 
+  
+        <h1>Actuators</h1>
+        <h3>AUTO ==> {{ auto}} ==>
+            {%if auto == 1%}2
+                <a href="/auto/off" class ="button">TURN OFF</a>
+            {%else%}
+                <a href="/auto/on" class ="button">TURN ON</a>
+            {%endif%}
+        </h3>
+    <h3>GO FORWARD ==> {{  forward  }} ==>    
+            {%if forward == 1%} 
+                <a href="/forward/off" class ="button" >TURN OFF</a> 
+            {%else%} 
+                <a href="/forward/on"  class ="button">TURN ON</a> 
+            {%endif%}     
+        </h3>        
+         
+        <h3>TURN RIGHT ==> {{  turnright  }} ==>    
+            {%if turnright == 1%} 
+                <a href="/turnright/off" class="button">TURN OFF</a> 
+            {%else%} 
+                <a href="/turnright/on"  class="button">TURN ON</a> 
+            {%endif%}     
+        </h3>
+        <h3>TURN LEFT ==> {{  turnleft  }} ==>    
+            {%if turnleft == 1%} 
+                <a href="/turnleft/off" class ="button" >TURN OFF</a> 
+            {%else%} 
+                <a href="/turnleft/on"  class ="button">TURN ON</a> 
+            {%endif%}     
+        </h3>
+        <h3>GO BACKWARD ==> {{  backward  }} ==>    
+            {%if backward == 1%} 
+                <a href="/backward/off" class ="button" >TURN OFF</a> 
+            {%else%} 
+                <a href="/backward/on"  class ="button">TURN ON</a> 
+            {%endif%}     
+        </h3>
+        <h3>STOP ==> {{  stopmotors  }} ==>    
+            {%if stopmotors == 1%} 
+                <a href="/stopmotors/off" class ="button" >TURN OFF</a> 
+            {%else%} 
+                <a href="/stopmotors/on"  class ="button">TURN ON</a> 
+           {%endif%}     
+
+       </h3>
+
+
+       -->       
+<script>
+
+
+var t1 = setInterval(function(){
+    sound_angle();
+    imu();
+  },2000);
+
+function rotate3dImage(roll,pitch,yaw){
+    var img = document.getElementById('sign2');
+    img.style.transform = 'rotateX(-'+pitch+'deg)';
+    img.style.transform = 'rotateY(-'+yaw+'deg)';
+    img.style.transform = 'rotateZ(-'+roll+'deg)';
+}
+
+
+function rotateImage(angle){
+    var img = document.getElementById('sign');
+    img.style.transform = 'rotate(-'+angle+'deg)';
+}
+
+function sound_angle(){
+    $.ajax({
+    url:'http://192.168.11.48:81/askangle',
+    type:'get',
+    cache:false,
+    success:function(response){
+      console.log(response);
+      document.getElementById("angle").innerHTML=response;
+      rotateImage(response);
+    }
+    }) 
+}
+
+function imu(){
+    $.ajax({
+    url:'http://192.168.11.48:81/getattitude',
+    type:'get',
+    cache:false,
+    success:function(response){
+      var response = response.split(",", 3);
+      console.log(response[0]);
+      console.log(response[1]);
+      console.log(response[2]);
+      rotate3dImage(response[0],response[1],rotate3dImage[2]);
+
+    }
+    }) 
+}
+
+function manual(){
+  $.ajax({
+  url:'http://192.168.11.48:81/auto/off',
+  type:'get',
+  cache:false
+})
+}
+function auto(){
+  $.ajax({
+  url:'http://192.168.11.48:81/auto/on',
+  type:'get',
+  cache:false
+})
+}
+function forward(){
+  $.ajax({
+  url:'http://192.168.11.48:81/forward/on',
+  type:'get',
+  cache:false
+})  
+}
+
+function turnright(){
+ $.ajax({
+  url:'http://192.168.11.48:81/turnright/on',
+  type:'get',
+  cache:false
+})
+}
+
+function turnleft(){
+ $.ajax({
+  url:'http://192.168.11.48:81/turnleft/on',
+  type:'get',
+  cache:false
+})
+}
+
+function backward(){
+ $.ajax({
+  url:'http://192.168.11.48:81/backward/on',
+  type:'get',
+  cache:false
+})
+}
+
+function stopmotors(){
+ $.ajax({
+  url:'http://192.168.11.48:81/stopmotors/on',
+  type:'get',
+  cache:false
+})
+} 
+
+
+  window.addEventListener('keydown', function (e) {
+             var keyid =e.keyCode;
+             if (keyid == 37) {turnleft()}
+             if (keyid == 39) {turnright()}
+             if (keyid == 38) {forward()}
+             if (keyid == 40) {backward()}
+             if (keyid == 35) {stopmotors()}
+   })  
+   </script>     
+   </body>
+</html>
