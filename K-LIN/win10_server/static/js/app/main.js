@@ -143,7 +143,7 @@ define( function( require ) {
   }
   var t1 = setInterval(function(){
     imu();
-  },2000);
+  },1000);
 
   function imu(){
     $.ajax({
