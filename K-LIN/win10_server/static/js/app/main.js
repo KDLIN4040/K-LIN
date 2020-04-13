@@ -17,7 +17,7 @@ define( function( require ) {
 
     // RENDERER
     renderer = new THREE.WebGLRenderer();
-    renderer.setSize( window.innerWidth/4, window.innerHeight/3 );
+    renderer.setSize( window.innerWidth/2, window.innerHeight/2.5 );
     document.body.appendChild( renderer.domElement );
 
     // BOX (IMU CHIP)
@@ -147,7 +147,7 @@ define( function( require ) {
 
   function imu(){
     $.ajax({
-    url:'http://192.168.11.9:81/getattitude',
+    url:'http://192.168.43.189:81/getattitude',
     type:'get',
     cache:false,
     success:function(response){
