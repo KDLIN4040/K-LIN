@@ -322,17 +322,18 @@ def thermal():
                 connection.sendall("HTTP/1.1 200 OK\n".encode())
                 connection.sendall("Content-Type: multipart/x-mixed-replace;boundary=--informs\n".encode())
                 #connection.sendall("Transfer-Encoding: chunked\n".encode()) 
+                
                 while(True):
                     lock.acquire()
                     var = os.system("./frame.exe")
                     lock.release()
                     if (var == 0 ): 
                         
-                        lock.acquire()
+                      
                         data = numpy.loadtxt("/run/shm/Numpey.dat", numpy.uint8)
-                        lock.release()
+
                         framecounter = framecounter + 1
-                        print ("frame: " + str(framecounter))
+                        #print ("frame: " + str(framecounter))
 
                         image = Image.fromarray(data)
                         
@@ -340,7 +341,7 @@ def thermal():
                         image = image.convert('RGB')
                         
                         #image = image.rotate(90).resize((80*5, 60*5), Image.ANTIALIAS)
-                        image = image.resize((80*5, 60*5),Image.ANTIALIAS)
+                        image = image.resize((80*5, 60*5))
 
                         #draw = ImageDraw.Draw(image)
                         #draw.text(text_pos, str(framecounter), fill=tcolor, font=font)
@@ -353,6 +354,7 @@ def thermal():
                         connection.sendall("Content-Type: image/jpeg\n".encode())
                         test=str(os.stat(TmpFileName).st_size)
                         connection.sendall("Content-Length: ".encode() + test.encode() + "\n\n".encode())
+                        #print ("Image Size: ",test)
                         
                         with open(TmpFileName, 'rb') as f:
                             data = f.read()
@@ -371,6 +373,12 @@ def thermal():
             #Clean up the connection
             connection.close()
             
+app = Flask(__name__)
+CORS(app)
+GPIO.setmode(GPIO.BOARD)
+GPIO.setwarnings(False)
+Mic_direction = 0
+fusionPose=[0,0,0]
 
 SETTINGS_FILE="RTIMULib"
 print("Using settings file" + SETTINGS_FILE + ".ini")
@@ -402,14 +410,16 @@ def readimu():
     global fusionPose
     
     while True:
-      lock.acquire()
       if imu.IMURead() :
+        #lock.acquire()
         data = imu.getIMUData()
+        #lock.release()
         fusionPose = data["fusionPose"]
-        print("r: %f p: %f y: %f" % (math.degrees(fusionPose[0]),math.degrees(fusionPose[1]), math.degrees(fusionPose[2])))
+        print("roll: %f pitch: %f yaw: %f" % (math.degrees(fusionPose[0]),math.degrees(fusionPose[1]), math.degrees(fusionPose[2])))
+        time.sleep(poll_interval*1.0/1000.0)
       else:pass
-      lock.release() 
-      time.sleep(poll_interval*1.0/1000.0)            
+        
+                  
 def sound():
   global Mic_direction
   #lock.acquire()
@@ -593,9 +603,9 @@ def wallfollower():
                         forward()
                         time.sleep(0.2)
                     else:
-                        movearc() 
+                        forward() 
                         time.sleep(0.2)  
-                    time.sleep(0.01)
+                    time.sleep(0.1)
                  
         except KeyboardInterrupt:
             stopmotors()
@@ -626,6 +636,7 @@ def check_WiFi():
 
 app = Flask(__name__)
 CORS(app)
+
 
 ##the thermal image has something error 3/23
 @app.route('/getattitude',methods=['GET'])
@@ -727,7 +738,7 @@ def action(deviceName, action):
 if __name__ == "__main__":
    #app.run(host='0.0.0.0',port=81,threaded=True,debug=True)
    t1=threading.Thread(target=thermal)
-   t1.start()
+   #t1.start()
    time.sleep(0.1)
    t2=threading.Thread(target=readimu)
    t2.start()
@@ -738,5 +749,5 @@ if __name__ == "__main__":
    t4=threading.Thread(target=check_WiFi)
    #t4.start()
    time.sleep(0.1)
-   #app.run(host='0.0.0.0',port=81,threaded=True,debug=False)
+   app.run(host='0.0.0.0',port=81,threaded=True,debug=False)
      
