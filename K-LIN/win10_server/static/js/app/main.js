@@ -17,7 +17,7 @@ define( function( require ) {
 
     // RENDERER
     renderer = new THREE.WebGLRenderer();
-    renderer.setSize( window.innerWidth/2, window.innerHeight/2.5 );
+    renderer.setSize( window.innerWidth/3, window.innerHeight/3 );
     document.body.appendChild( renderer.domElement );
 
     // BOX (IMU CHIP)
