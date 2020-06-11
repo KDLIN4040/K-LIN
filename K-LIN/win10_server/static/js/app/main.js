@@ -147,7 +147,7 @@ define( function( require ) {
 
   function imu(){
     $.ajax({
-    url:'http://192.168.11.48:81/getattitude',
+    url:'http://192.168.11.9:81/getattitude',
     type:'get',
     cache:false,
     success:function(response){
