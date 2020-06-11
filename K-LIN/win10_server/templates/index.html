@@ -48,7 +48,8 @@
   .dropdown-content {
     display: none;
     position: absolute;
-    top:50px;
+    right:300px;
+    top:80px;
     background-color: #f9f9f9;
     min-width: 160px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
@@ -84,20 +85,26 @@
   }
 </style>
  <body >
+    
     <div style="text-align:center;"><h1 style="color:blue;">Robot Control Panel</h1></div>
     <div id = "information" class="container" style="position:relative;top:5%;left:50%">
-      <h1 style="position: absolute;color:#FF6347">Thermal Streaming</h1>
-      <iframe src="http://192.168.11.9:8080/" height="350" width="400"style="position: absolute;top:50px;border: 4px solid blue;"></iframe>
-      <div style="position:absolute;top:410px;border-color:#aaaaee;border-style:solid;border-width:3px;padding-top:350px;padding-right:400px ">
-        <img style="position: absolute;top:100px;left:30%" src="/static/img/sign.png" id="sign">
-        <h1 style="color:white;position: absolute;top: 20px;left:10%">Sound angle(degree)</h1>
-        <h1 id='angle' style="color:red;position: absolute;top: 100px;left:20%">0&deg</h1>
+      <iframe width="600" height="400" style="position: absolute;top:50px;border: 4px solid blue;"src="https://www.youtube.com/embed/bgupDGxLYxQ" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen ></iframe>
+      <h1 style="position: absolute;color:#FF6347">Camera Streaming</h1>
+      <iframe src="http://192.168.43.190:8080/" height="300" width="400"style="position: absolute;top:454px;border: 4px solid blue;"></iframe>
+      
+      <div style="position:absolute;top:454px;left:404px;border-color:#aaaaee;border-style:solid;border-width:3px;padding-top:350px;padding-right:200px ">
+        
+        <img style="position: absolute;top:100px;left:30%" src="/static/img/sign.png"width="100" height="100" id="sign">
+        <h2 style="color:white;position: absolute;top: 20px;left:5%">Sound angle(degree)</h2>
+        <h1 id='angle' style="color:red;position: absolute;top: 100px;left:10%">0&deg</h1>
+      
       </div>
+      
     </div>
     <div id ="Mode" style="position: relative;top:5%;left:50%;margin-top: 0px;" > 
       <div class="dropdown">
           <button class="dropbtn" style="position: absolute;top:30px;right:300px">Control Mode</button>
-          <div class="dropdown-content">
+          <div class="dropdown-content" >
             <a onclick = "manual()">Manual Mode</a>
             <a onclick = "auto()">Auto Mode</a>
           </div>
@@ -219,7 +226,7 @@
 <script>
 
 
-var t1 = setInterval(function(){
+var t = setInterval(function(){
     sound_angle();
   },2000);
 
@@ -239,12 +246,13 @@ function rotateImage(angle){
 
 function sound_angle(){
     $.ajax({
-    url:'http://192.168.11.9:81/askangle',
+
+    url:'http://192.168.43.190:81/askangle',
     type:'get',
     cache:false,
     success:function(response){
       console.log(response);
-      document.getElementById("angle").innerHTML=response;
+      document.getElementById("angle").innerHTML=response+"&deg";
       rotateImage(response);
     }
     }) 
@@ -252,7 +260,8 @@ function sound_angle(){
 
 function imu(){
     $.ajax({
-    url:'http://192.168.11.9:81/getattitude',
+
+    url:'http://192.168.43.190:81/getattitude',
     type:'get',
     cache:false,
     success:function(response){
@@ -268,21 +277,21 @@ function imu(){
 
 function manual(){
   $.ajax({
-  url:'http://192.168.11.9:81/auto/off',
+  url:'http://192.168.43.190:81/auto/off',
   type:'get',
   cache:false
 })
 }
 function auto(){
   $.ajax({
-  url:'http://192.168.11.9:81/auto/on',
+  url:'http://192.168.43.190:81/auto/on',
   type:'get',
   cache:false
 })
 }
 function forward(){
   $.ajax({
-  url:'http://192.168.11.9:81/forward/on',
+  url:'http://192.168.43.190:81/forward/on',
   type:'get',
   cache:false
 })  
@@ -290,7 +299,7 @@ function forward(){
 
 function turnright(){
  $.ajax({
-  url:'http://192.168.11.9:81/turnright/on',
+  url:'http://192.168.43.190:81/turnright/on',
   type:'get',
   cache:false
 })
@@ -298,7 +307,7 @@ function turnright(){
 
 function turnleft(){
  $.ajax({
-  url:'http://192.168.11.9:81/turnleft/on',
+  url:'http://192.168.43.190:81/turnleft/on',
   type:'get',
   cache:false
 })
@@ -306,7 +315,7 @@ function turnleft(){
 
 function backward(){
  $.ajax({
-  url:'http://192.168.11.9:81/backward/on',
+  url:'http://192.168.43.190:81/backward/on',
   type:'get',
   cache:false
 })
@@ -314,7 +323,7 @@ function backward(){
 
 function stopmotors(){
  $.ajax({
-  url:'http://192.168.11.9:81/stopmotors/on',
+  url:'http://192.168.43.190:81/stopmotors/on',
   type:'get',
   cache:false
 })
@@ -328,6 +337,8 @@ function stopmotors(){
              if (keyid == 38) {forward()}
              if (keyid == 40) {backward()}
              if (keyid == 35) {stopmotors()}
+             if (keyid == 16) {auto()}
+             if (keyid == 17) {manual()}
    })  
    </script>     
    </body>
